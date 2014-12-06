@@ -7,6 +7,9 @@
 #include <math.h>
 #include <complex.h>
 
+#define PI 3.14159265358979323846
+#define E  2.71828182845904523536
+
 #define BUFSZ 1024
 static char buffer[BUFSZ];
 
@@ -57,7 +60,11 @@ static number_t
 parse(const char *token)
 {
     number_t number;
-    if (strchr(token, ';')) {
+    if (!strcmp(token, "e"))
+        return E;
+    else if (!strcmp(token, "pi"))
+        return PI;
+    else if (strchr(token, ';')) {
         char *sep;
         number = strtod(token, &sep);
         number += atof(++sep) * I;

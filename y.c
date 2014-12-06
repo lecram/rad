@@ -60,7 +60,7 @@ exch()
 int
 snprintn(char *buf, int buf_size, number_t number)
 {
-    int count;
+    int count = 0;
     switch (repr) {
         case DEC:
             if (cimag(number))

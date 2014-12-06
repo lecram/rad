@@ -83,6 +83,32 @@ factorial(long n)
     return f;
 }
 
+static long
+egcd(long a, long b)
+{
+    long q, r, x, y;
+    long x1, y1, x2, y2;
+    if (!(a && b)) {
+        push(1);
+        push(0);
+    } else {
+        x1 = 0; y1 = 1;
+        x2 = 1; y2 = 0;
+        while (b) {
+            q = a / b;
+            r = a % b;
+            x = x2 - q * x1;
+            y = y2 - q * y1;
+            a = b; b = r;
+            x2 = x1; x1 = x;
+            y2 = y1; y1 = y;
+        }
+        push(x2);
+        push(y2);
+    }
+    return a;
+}
+
 static int
 snprintn(char *buf, int buf_size, number_t number)
 {
@@ -223,6 +249,10 @@ process(const char *token)
         b = pop();
         a = pop();
         push(gcd((long) a, (long) b));
+    } else if (!strcmp(token, "egcd")) {
+        b = pop();
+        a = pop();
+        push(egcd((long) a, (long) b));
     } else if (!strcmp(token, "lcm")) {
         b = pop();
         a = pop();

@@ -7,6 +7,9 @@
 #include <math.h>
 #include <complex.h>
 
+#define BUFSZ 1024
+static char buffer[BUFSZ];
+
 typedef complex number_t;
 
 typedef struct {
@@ -94,19 +97,23 @@ process(const char *token)
         b = pop();
         a = pop();
         push(cpow(a, b));
+    } else if (!strcmp(token, "p")) {
+        unsigned i;
+        int offset = 0;
+        for (i = 0; i < stk.len; i++, offset++) {
+            offset += snprinto(buffer + offset, BUFSZ - offset, stk.slots[i]);
+            strcat(buffer, " ");
+        }
+        puts(buffer);
     } else {
         push(parse(token));
     }
 }
 
-#define BUFSZ 1024
-
 int
 main()
 {
-    char buffer[BUFSZ];
     const char *token;
-    int offset;
     stk.slots = (number_t *) malloc(stk.bulk * sizeof(number_t));
     while (!feof(stdin)) {
         if (!fgets(buffer, BUFSZ, stdin))
@@ -119,12 +126,6 @@ main()
         snprinto(buffer, BUFSZ, peek());
         puts(buffer);
     }
-    offset = 0;
-    while (stk.len) {
-        offset += snprinto(buffer + offset, BUFSZ - offset, pop()) + 1;
-        strcat(buffer, " ");
-    }
-    puts(buffer);
     free(stk.slots);
     return 0;
 }

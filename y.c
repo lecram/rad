@@ -48,6 +48,15 @@ peek()
     return stk.slots[stk.len - 1];
 }
 
+static void
+exch()
+{
+    number_t n;
+    n = stk.slots[stk.len - 1];
+    stk.slots[stk.len - 1] = stk.slots[stk.len - 2];
+    stk.slots[stk.len - 2] = n;
+}
+
 int
 snprintn(char *buf, int buf_size, number_t number)
 {
@@ -172,6 +181,14 @@ process(const char *token)
         push(csinh(pop()));
     } else if (!strcmp(token, "tanh")) {
         push(ctanh(pop()));
+    } else if (!strcmp(token, "drop")) {
+        pop();
+    } else if (!strcmp(token, "dup")) {
+        push(peek());
+    } else if (!strcmp(token, "exch")) {
+        exch();
+    } else if (!strcmp(token, "clear")) {
+        while (stk.len) pop();
     } else
         push(parse(token));
 }
@@ -184,7 +201,7 @@ main()
     while (!feof(stdin)) {
         if (!fgets(buffer, BUFSZ, stdin))
             break;
-        if (!strcmp(buffer, "p\n")) {
+        if (!strcmp(buffer, "show\n")) {
             unsigned i;
             int offset;
             for (i = 0, offset = 0; i < stk.len; i++, offset++) {
@@ -192,9 +209,9 @@ main()
                 strcat(buffer, " ");
             }
             puts(buffer);
-        } else if (!strcmp(buffer, "d\n")) {
+        } else if (!strcmp(buffer, "dec\n")) {
             repr = DEC;
-        } else if (!strcmp(buffer, "x\n")) {
+        } else if (!strcmp(buffer, "hex\n")) {
             repr = HEX;
         } else {
         token = strtok(buffer, " \n");

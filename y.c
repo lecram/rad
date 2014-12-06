@@ -39,12 +39,6 @@ peek()
     return stk.slots[stk.len - 1];
 }
 
-static void
-clear()
-{
-    while (stk.len) pop();
-}
-
 int
 snprinto(char *buffer, int buf_size, number_t number)
 {
@@ -111,22 +105,26 @@ int
 main()
 {
     char buffer[BUFSZ];
+    const char *token;
+    int offset;
     stk.slots = (number_t *) malloc(stk.bulk * sizeof(number_t));
-    process("2");
-    process("3");
-    process("#");
-    process("3");
-    process("/");
-    process("0;123");
-    process("-");
-    /* process("3.14"); */
-    /* process("2.56;-5.23"); */
-    while (stk.len) {
+    while (!feof(stdin)) {
+        if (!fgets(buffer, BUFSZ, stdin))
+            break;
+        token = strtok(buffer, " \n");
+        while (token) {
+            process(token);
+            token = strtok(NULL, " \n");
+        }
         snprinto(buffer, BUFSZ, peek());
         puts(buffer);
-        pop();
     }
-    clear();
+    offset = 0;
+    while (stk.len) {
+        offset += snprinto(buffer + offset, BUFSZ - offset, pop()) + 1;
+        strcat(buffer, " ");
+    }
+    puts(buffer);
     free(stk.slots);
     return 0;
 }

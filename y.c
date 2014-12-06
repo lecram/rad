@@ -75,6 +75,14 @@ lcm(long a, long b)
     return a * b / gcd(a, b);
 }
 
+long
+factorial(long n)
+{
+    long f = 1;
+    while (n) f *= n--;
+    return f;
+}
+
 int
 snprintn(char *buf, int buf_size, number_t number)
 {
@@ -219,6 +227,8 @@ process(const char *token)
         b = pop();
         a = pop();
         push(lcm((long) a, (long) b));
+    } else if (!strcmp(token, "!")) {
+        push(factorial((long) pop()));
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

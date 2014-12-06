@@ -139,6 +139,14 @@ process(const char *token)
         b = pop();
         a = pop();
         push(((unsigned) a) ^ ((unsigned) b));
+    } else if (!strcmp(token, ">>")) {
+        b = pop();
+        a = pop();
+        push(((unsigned) a) >> ((unsigned) b));
+    } else if (!strcmp(token, "<<")) {
+        b = pop();
+        a = pop();
+        push(((unsigned) a) << ((unsigned) b));
     } else if (!strcmp(token, "real")) {
         push(creal(pop()));
     } else if (!strcmp(token, "imag")) {

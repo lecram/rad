@@ -57,7 +57,7 @@ exch()
     stk.slots[stk.len - 2] = n;
 }
 
-long
+static long
 gcd(long a, long b)
 {
     long t;
@@ -69,13 +69,13 @@ gcd(long a, long b)
     return a;
 }
 
-long
+static long
 lcm(long a, long b)
 {
     return a * b / gcd(a, b);
 }
 
-long
+static long
 factorial(long n)
 {
     long f = 1;
@@ -83,7 +83,7 @@ factorial(long n)
     return f;
 }
 
-int
+static int
 snprintn(char *buf, int buf_size, number_t number)
 {
     int count = 0;

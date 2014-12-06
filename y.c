@@ -18,7 +18,7 @@ typedef struct {
     number_t *slots;
 } stk_t;
 
-static stk_t stk = {16u, 0, NULL};
+static stk_t stk = {16u, 0u, NULL};
 
 static void
 push(number_t number)
@@ -43,7 +43,7 @@ peek()
 }
 
 int
-snprinto(char *buffer, int buf_size, number_t number)
+snprintn(char *buffer, int buf_size, number_t number)
 {
     int count;
     if (cimag(number))
@@ -100,8 +100,9 @@ process(const char *token)
     } else if (!strcmp(token, "p")) {
         unsigned i;
         int offset = 0;
+        strcpy(buffer, "");
         for (i = 0; i < stk.len; i++, offset++) {
-            offset += snprinto(buffer + offset, BUFSZ - offset, stk.slots[i]);
+            offset += snprintn(buffer + offset, BUFSZ - offset, stk.slots[i]);
             strcat(buffer, " ");
         }
         puts(buffer);
@@ -123,8 +124,10 @@ main()
             process(token);
             token = strtok(NULL, " \n");
         }
-        snprinto(buffer, BUFSZ, peek());
-        puts(buffer);
+        if (stk.len) {
+            snprintn(buffer, BUFSZ, peek());
+            puts(buffer);
+        }
     }
     free(stk.slots);
     return 0;

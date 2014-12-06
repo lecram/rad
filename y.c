@@ -74,6 +74,8 @@ parse(const char *token)
         return E;
     else if (!strcmp(token, "pi"))
         return PI;
+    else if (!strcmp(token, "i"))
+        return I;
     else if (strchr(token, ';')) {
         char *sep;
         number = strtod(token, &sep);
@@ -115,8 +117,7 @@ process(const char *token)
         a = pop();
         push(cpow(a, b));
     } else if (!strcmp(token, "~")) {
-        a = pop();
-        push(~ (unsigned) a);
+        push(~ (unsigned) pop());
     } else if (!strcmp(token, "|")) {
         b = pop();
         a = pop();
@@ -129,6 +130,48 @@ process(const char *token)
         b = pop();
         a = pop();
         push(((unsigned) a) ^ ((unsigned) b));
+    } else if (!strcmp(token, "real")) {
+        push(creal(pop()));
+    } else if (!strcmp(token, "imag")) {
+        push(cimag(pop()));
+    } else if (!strcmp(token, "arg")) {
+        push(carg(pop()));
+    } else if (!strcmp(token, "abs")) {
+        push(cabs(pop()));
+    } else if (!strcmp(token, "conj")) {
+        push(conj(pop()));
+    } else if (!strcmp(token, "proj")) {
+        push(cproj(pop()));
+    } else if (!strcmp(token, "exp")) {
+        push(cexp(pop()));
+    } else if (!strcmp(token, "log")) {
+        push(clog(pop()));
+    } else if (!strcmp(token, "sqrt")) {
+        push(csqrt(pop()));
+    } else if (!strcmp(token, "acos")) {
+        push(cacos(pop()));
+    } else if (!strcmp(token, "asin")) {
+        push(casin(pop()));
+    } else if (!strcmp(token, "atan")) {
+        push(catan(pop()));
+    } else if (!strcmp(token, "cos")) {
+        push(ccos(pop()));
+    } else if (!strcmp(token, "sin")) {
+        push(csin(pop()));
+    } else if (!strcmp(token, "tan")) {
+        push(ctan(pop()));
+    } else if (!strcmp(token, "acosh")) {
+        push(cacosh(pop()));
+    } else if (!strcmp(token, "asinh")) {
+        push(casinh(pop()));
+    } else if (!strcmp(token, "atanh")) {
+        push(catanh(pop()));
+    } else if (!strcmp(token, "cosh")) {
+        push(ccosh(pop()));
+    } else if (!strcmp(token, "sinh")) {
+        push(csinh(pop()));
+    } else if (!strcmp(token, "tanh")) {
+        push(ctanh(pop()));
     } else
         push(parse(token));
 }

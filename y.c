@@ -109,6 +109,19 @@ egcd(long a, long b)
     return a;
 }
 
+static long
+totient(long n)
+{
+    long tot = 1;
+    long pos = n - 1;
+    while (pos > 1) {
+        if (gcd(pos, n) == 1)
+            tot++;
+        pos--;
+    }
+    return tot;
+}
+
 static int
 snprintn(char *buf, int buf_size, number_t number)
 {
@@ -259,6 +272,8 @@ process(const char *token)
         push(lcm((long) a, (long) b));
     } else if (!strcmp(token, "!")) {
         push(factorial((long) pop()));
+    } else if (!strcmp(token, "@")) {
+        push(totient((long) pop()));
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

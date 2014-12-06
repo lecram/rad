@@ -117,6 +117,18 @@ process(const char *token)
     } else if (!strcmp(token, "~")) {
         a = pop();
         push(~ (unsigned) a);
+    } else if (!strcmp(token, "|")) {
+        b = pop();
+        a = pop();
+        push(((unsigned) a) | ((unsigned) b));
+    } else if (!strcmp(token, "&")) {
+        b = pop();
+        a = pop();
+        push(((unsigned) a) & ((unsigned) b));
+    } else if (!strcmp(token, "^")) {
+        b = pop();
+        a = pop();
+        push(((unsigned) a) ^ ((unsigned) b));
     } else
         push(parse(token));
 }

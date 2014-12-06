@@ -13,6 +13,9 @@
 #define BUFSZ 1024
 static char buffer[BUFSZ];
 
+typedef enum {DEC, HEX} repr_t;
+static repr_t repr = DEC;
+
 typedef complex number_t;
 
 typedef struct {
@@ -49,10 +52,17 @@ int
 snprintn(char *buf, int buf_size, number_t number)
 {
     int count;
-    if (cimag(number))
-        count = snprintf(buf, buf_size, "%g;%g", creal(number), cimag(number));
-    else
-        count = snprintf(buf, buf_size, "%g", creal(number));
+    switch (repr) {
+        case DEC:
+            if (cimag(number))
+                count = snprintf(buf, buf_size, "%g;%g", creal(number), cimag(number));
+            else
+                count = snprintf(buf, buf_size, "%g", creal(number));
+            break;
+        case HEX:
+            count = snprintf(buf, buf_size, "%#0*X\n", sizeof(unsigned) * 2 + 2, (unsigned) number);
+            break;
+    }
     return count;
 }
 
@@ -104,6 +114,9 @@ process(const char *token)
         b = pop();
         a = pop();
         push(cpow(a, b));
+    } else if (!strcmp(token, "~")) {
+        a = pop();
+        push(~ (unsigned) a);
     } else
         push(parse(token));
 }
@@ -124,6 +137,10 @@ main()
                 strcat(buffer, " ");
             }
             puts(buffer);
+        } else if (!strcmp(buffer, "d\n")) {
+            repr = DEC;
+        } else if (!strcmp(buffer, "x\n")) {
+            repr = HEX;
         } else {
         token = strtok(buffer, " \n");
             while (token) {

@@ -1,4 +1,4 @@
-/* gcc -Os -Wall -Wextra -Werror -std=c99 -o y y.c -lm */
+/* gcc -O2 -Wall -Wextra -Werror -std=c99 -o y y.c -lm */
 
 #include <stdlib.h>
 #include <stdio.h>

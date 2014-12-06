@@ -122,6 +122,26 @@ totient(long n)
     return tot;
 }
 
+static unsigned
+factor(long n)
+{
+    long d;
+    unsigned c = 0;
+    if (n % 2 == 0) {
+        push(2);
+        c++;
+        while (n % 2 == 0) n /= 2;
+    }
+    for (d = 3; d <= n; d += 2) {
+        if (n % d == 0) {
+            push(d);
+            c++;
+            while (n % d == 0) n /= d;
+        }
+    }
+    return c;
+}
+
 static int
 snprintn(char *buf, int buf_size, number_t number)
 {
@@ -274,6 +294,8 @@ process(const char *token)
         push(factorial((long) pop()));
     } else if (!strcmp(token, "@")) {
         push(totient((long) pop()));
+    } else if (!strcmp(token, "factor")) {
+        push(factor((long) pop()));
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

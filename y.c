@@ -1,4 +1,4 @@
-/* gcc -Wall -Wextra -pedantic -std=c99 -o y y.c */
+/* gcc -Os -Wall -Wextra -Werror -std=c99 -o y y.c -lm */
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -57,6 +57,24 @@ exch()
     stk.slots[stk.len - 2] = n;
 }
 
+long
+gcd(long a, long b)
+{
+    long t;
+    while (a && b) {
+        t = a;
+        a = b;
+        b = t % b;
+    }
+    return a;
+}
+
+long
+lcm(long a, long b)
+{
+    return a * b / gcd(a, b);
+}
+
 int
 snprintn(char *buf, int buf_size, number_t number)
 {
@@ -189,6 +207,14 @@ process(const char *token)
         push(csinh(pop()));
     } else if (!strcmp(token, "tanh")) {
         push(ctanh(pop()));
+    } else if (!strcmp(token, "gcd")) {
+        b = pop();
+        a = pop();
+        push(gcd((long) a, (long) b));
+    } else if (!strcmp(token, "lcm")) {
+        b = pop();
+        a = pop();
+        push(lcm((long) a, (long) b));
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

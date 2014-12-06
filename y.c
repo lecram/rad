@@ -46,13 +46,13 @@ peek()
 }
 
 int
-snprintn(char *buffer, int buf_size, number_t number)
+snprintn(char *buf, int buf_size, number_t number)
 {
     int count;
     if (cimag(number))
-        count = snprintf(buffer, buf_size, "%g;%g", creal(number), cimag(number));
+        count = snprintf(buf, buf_size, "%g;%g", creal(number), cimag(number));
     else
-        count = snprintf(buffer, buf_size, "%g", creal(number));
+        count = snprintf(buf, buf_size, "%g", creal(number));
     return count;
 }
 
@@ -104,18 +104,8 @@ process(const char *token)
         b = pop();
         a = pop();
         push(cpow(a, b));
-    } else if (!strcmp(token, "p")) {
-        unsigned i;
-        int offset = 0;
-        strcpy(buffer, "");
-        for (i = 0; i < stk.len; i++, offset++) {
-            offset += snprintn(buffer + offset, BUFSZ - offset, stk.slots[i]);
-            strcat(buffer, " ");
-        }
-        puts(buffer);
-    } else {
+    } else
         push(parse(token));
-    }
 }
 
 int
@@ -126,14 +116,24 @@ main()
     while (!feof(stdin)) {
         if (!fgets(buffer, BUFSZ, stdin))
             break;
-        token = strtok(buffer, " \n");
-        while (token) {
-            process(token);
-            token = strtok(NULL, " \n");
-        }
-        if (stk.len) {
-            snprintn(buffer, BUFSZ, peek());
+        if (!strcmp(buffer, "p\n")) {
+            unsigned i;
+            int offset;
+            for (i = 0, offset = 0; i < stk.len; i++, offset++) {
+                offset += snprintn(buffer + offset, BUFSZ - offset, stk.slots[i]);
+                strcat(buffer, " ");
+            }
             puts(buffer);
+        } else {
+        token = strtok(buffer, " \n");
+            while (token) {
+                process(token);
+                token = strtok(NULL, " \n");
+            }
+            if (stk.len) {
+                snprintn(buffer, BUFSZ, peek());
+                puts(buffer);
+            }
         }
     }
     free(stk.slots);

@@ -38,16 +38,10 @@ push(number_t number)
 }
 
 static number_t
-pop()
-{
-    return stk.slots[--stk.len];
-}
+pop() { return stk.slots[--stk.len]; }
 
 static number_t
-peek()
-{
-    return stk.slots[stk.len - 1];
-}
+peek() { return stk.slots[stk.len - 1]; }
 
 static void
 exch()
@@ -71,10 +65,7 @@ gcd(long a, long b)
 }
 
 static long
-lcm(long a, long b)
-{
-    return a * b / gcd(a, b);
-}
+lcm(long a, long b) { return a * b / gcd(a, b); }
 
 static long
 factorial(long n)
@@ -215,12 +206,10 @@ process(const char *token)
     CFUNC(sin) CFUNC(tan) CFUNC(acosh) CFUNC(asinh) CFUNC(atanh) CFUNC(cosh)
     CFUNC(sinh) CFUNC(tanh)
     else if (!strcmp(token, "%")) {
-        b = pop();
-        a = pop();
+        b = pop(); a = pop();
         push(fmod(creal(a), creal(b)));
     } else if (!strcmp(token, "#")) {
-        b = pop();
-        a = pop();
+        b = pop(); a = pop();
         push(cpow(a, b));
     } else if (!strcmp(token, "~")) {
         push(~ (unsigned) pop());

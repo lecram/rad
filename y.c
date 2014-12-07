@@ -217,6 +217,13 @@ process(const char *token)
         push(floor(pop()));
     } else if (!strcmp(token, "ceil")) {
         push(ceil(pop()));
+    } else if (!strcmp(token, "deg")) {
+        push(creal(pop()) * 180 / PI);
+    } else if (!strcmp(token, "rad")) {
+        push(creal(pop()) * PI / 180);
+    } else if (!strcmp(token, "atan2")) {
+        b = pop(); a = pop();
+        push(atan2(creal(a), creal(b)));
     } else if (!strcmp(token, "conj")) {
         push(conj(pop()));
     } else if (!strcmp(token, "!")) {

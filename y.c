@@ -15,6 +15,7 @@ static char buffer[BUFSZ];
 
 typedef enum {DEC, HEX} repr_t;
 static repr_t repr = DEC;
+static int prec = 8;
 
 typedef complex number_t;
 
@@ -149,9 +150,15 @@ snprintn(char *buf, int buf_size, number_t number)
     switch (repr) {
         case DEC:
             if (cimag(number))
-                count = snprintf(buf, buf_size, "%g;%g", creal(number), cimag(number));
+                count = snprintf(
+                    buf, buf_size, "%.*g;%.*g",
+                    prec, creal(number), prec, cimag(number)
+                );
             else
-                count = snprintf(buf, buf_size, "%g", creal(number));
+                count = snprintf(
+                    buf, buf_size, "%.*g",
+                    prec, creal(number)
+                );
             break;
         case HEX:
             count = snprintf(buf, buf_size, "%#0*X\n", sizeof(unsigned) * 2 + 2, (unsigned) number);
@@ -186,7 +193,9 @@ static void
 process(const char *token)
 {
     number_t a, b;
-    if (!strcmp(token, "+")) {
+    if (!strcmp(token, "prec"))
+        prec = pop();
+    else if (!strcmp(token, "+")) {
         b = pop();
         a = pop();
         push(a + b);

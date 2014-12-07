@@ -189,29 +189,32 @@ parse(const char *token)
     return number;
 }
 
+#define BINOP(OP)   else if (!strcmp(token, #OP)) \
+                    { b = pop(); a = pop(); push(a OP b); }
+
+#define BINBOP(OP)  else if (!strcmp(token, #OP)) \
+                    { b = pop(); a = pop(); push(((unsigned) a) OP ((unsigned) b)); }
+
+#define BFUNC(OP)   else if (!strcmp(token, #OP)) \
+                    { b = pop(); a = pop(); push(OP((long) a, (long) b)); }
+
+#define CFUNC(OP)   else if (!strcmp(token, #OP)) \
+                    { push(c ## OP(pop())); }
+
 static void
 process(const char *token)
 {
     number_t a, b;
     if (!strcmp(token, "prec"))
         prec = pop();
-    else if (!strcmp(token, "+")) {
-        b = pop();
-        a = pop();
-        push(a + b);
-    } else if (!strcmp(token, "-")) {
-        b = pop();
-        a = pop();
-        push(a - b);
-    } else if (!strcmp(token, "*")) {
-        b = pop();
-        a = pop();
-        push(a * b);
-    } else if (!strcmp(token, "/")) {
-        b = pop();
-        a = pop();
-        push(a / b);
-    } else if (!strcmp(token, "%")) {
+    BINOP(+) BINOP(-) BINOP(*) BINOP(/)
+    BINBOP(|) BINBOP(&) BINBOP(^) BINBOP(>>) BINBOP(<<)
+    BFUNC(gcd) BFUNC(lcm) BFUNC(egcd)
+    CFUNC(real) CFUNC(imag) CFUNC(arg) CFUNC(abs) CFUNC(proj) CFUNC(exp)
+    CFUNC(log) CFUNC(sqrt) CFUNC(acos) CFUNC(asin) CFUNC(atan) CFUNC(cos)
+    CFUNC(sin) CFUNC(tan) CFUNC(acosh) CFUNC(asinh) CFUNC(atanh) CFUNC(cosh)
+    CFUNC(sinh) CFUNC(tanh)
+    else if (!strcmp(token, "%")) {
         b = pop();
         a = pop();
         push(fmod(creal(a), creal(b)));
@@ -221,84 +224,12 @@ process(const char *token)
         push(cpow(a, b));
     } else if (!strcmp(token, "~")) {
         push(~ (unsigned) pop());
-    } else if (!strcmp(token, "|")) {
-        b = pop();
-        a = pop();
-        push(((unsigned) a) | ((unsigned) b));
-    } else if (!strcmp(token, "&")) {
-        b = pop();
-        a = pop();
-        push(((unsigned) a) & ((unsigned) b));
-    } else if (!strcmp(token, "^")) {
-        b = pop();
-        a = pop();
-        push(((unsigned) a) ^ ((unsigned) b));
-    } else if (!strcmp(token, ">>")) {
-        b = pop();
-        a = pop();
-        push(((unsigned) a) >> ((unsigned) b));
-    } else if (!strcmp(token, "<<")) {
-        b = pop();
-        a = pop();
-        push(((unsigned) a) << ((unsigned) b));
     } else if (!strcmp(token, "floor")) {
-        push(floor(creal(pop())));
+        push(floor(pop()));
     } else if (!strcmp(token, "ceil")) {
-        push(ceil(creal(pop())));
-    } else if (!strcmp(token, "real")) {
-        push(creal(pop()));
-    } else if (!strcmp(token, "imag")) {
-        push(cimag(pop()));
-    } else if (!strcmp(token, "arg")) {
-        push(carg(pop()));
-    } else if (!strcmp(token, "abs")) {
-        push(cabs(pop()));
+        push(ceil(pop()));
     } else if (!strcmp(token, "conj")) {
         push(conj(pop()));
-    } else if (!strcmp(token, "proj")) {
-        push(cproj(pop()));
-    } else if (!strcmp(token, "exp")) {
-        push(cexp(pop()));
-    } else if (!strcmp(token, "log")) {
-        push(clog(pop()));
-    } else if (!strcmp(token, "sqrt")) {
-        push(csqrt(pop()));
-    } else if (!strcmp(token, "acos")) {
-        push(cacos(pop()));
-    } else if (!strcmp(token, "asin")) {
-        push(casin(pop()));
-    } else if (!strcmp(token, "atan")) {
-        push(catan(pop()));
-    } else if (!strcmp(token, "cos")) {
-        push(ccos(pop()));
-    } else if (!strcmp(token, "sin")) {
-        push(csin(pop()));
-    } else if (!strcmp(token, "tan")) {
-        push(ctan(pop()));
-    } else if (!strcmp(token, "acosh")) {
-        push(cacosh(pop()));
-    } else if (!strcmp(token, "asinh")) {
-        push(casinh(pop()));
-    } else if (!strcmp(token, "atanh")) {
-        push(catanh(pop()));
-    } else if (!strcmp(token, "cosh")) {
-        push(ccosh(pop()));
-    } else if (!strcmp(token, "sinh")) {
-        push(csinh(pop()));
-    } else if (!strcmp(token, "tanh")) {
-        push(ctanh(pop()));
-    } else if (!strcmp(token, "gcd")) {
-        b = pop();
-        a = pop();
-        push(gcd((long) a, (long) b));
-    } else if (!strcmp(token, "egcd")) {
-        b = pop();
-        a = pop();
-        push(egcd((long) a, (long) b));
-    } else if (!strcmp(token, "lcm")) {
-        b = pop();
-        a = pop();
-        push(lcm((long) a, (long) b));
     } else if (!strcmp(token, "!")) {
         push(factorial((long) pop()));
     } else if (!strcmp(token, "@")) {

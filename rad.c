@@ -207,7 +207,7 @@ process(const char *token)
     else if (!strcmp(token, "%")) {
         b = pop(); a = pop();
         push(fmod(creal(a), creal(b)));
-    } else if (!strcmp(token, "#")) {
+    } else if (!strcmp(token, "**")) {
         b = pop(); a = pop();
         push(cpow(a, b));
     } else if (!strcmp(token, "~")) {
@@ -227,7 +227,7 @@ process(const char *token)
         push(conj(pop()));
     } else if (!strcmp(token, "!")) {
         push(factorial((long) pop()));
-    } else if (!strcmp(token, "@")) {
+    } else if (!strcmp(token, "tot")) {
         push(totient((long) pop()));
     } else if (!strcmp(token, "factor")) {
         push(factor((long) pop()));

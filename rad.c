@@ -161,6 +161,26 @@ next(unsigned n)
 }
 
 static unsigned
+pn(unsigned n)
+{
+    unsigned p = 1;
+    while (n--) p = next(p);
+    return p;
+}
+
+static unsigned
+primorial(unsigned n)
+{
+    unsigned r;
+    r = isprime(n) ? n : 1;
+    while (n > 2) {
+        n = prev(n);
+        r *= n;
+    }
+    return r;
+}
+
+static unsigned
 factor(unsigned n)
 {
     unsigned d;
@@ -253,7 +273,7 @@ process(const char *token)
     CFUNC(log) CFUNC(sqrt) CFUNC(acos) CFUNC(asin) CFUNC(atan) CFUNC(cos)
     CFUNC(sin) CFUNC(tan) CFUNC(acosh) CFUNC(asinh) CFUNC(atanh) CFUNC(cosh)
     CFUNC(sinh) CFUNC(tanh)
-    UFUNC(tot) UFUNC(factor) UFUNC(isprime) UFUNC(prev) UFUNC(next)
+    UFUNC(tot) UFUNC(factor) UFUNC(isprime) UFUNC(prev) UFUNC(next) UFUNC(pn)
     else if (!strcmp(token, "%")) {
         b = pop(); a = pop();
         push(fmod(creal(a), creal(b)));
@@ -277,6 +297,8 @@ process(const char *token)
         push(conj(pop()));
     } else if (!strcmp(token, "!")) {
         push(factorial((unsigned) pop()));
+    } else if (!strcmp(token, "#")) {
+        push(primorial((unsigned) pop()));
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

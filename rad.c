@@ -38,10 +38,10 @@ push(number_t number)
 }
 
 static number_t
-pop() { return stk.slots[--stk.len]; }
+pop() { return stk.len ? stk.slots[--stk.len] : 0; }
 
 static number_t
-peek() { return stk.slots[stk.len - 1]; }
+peek() { return stk.len ? stk.slots[stk.len - 1] : 0; }
 
 static void
 exch()

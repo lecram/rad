@@ -68,14 +68,6 @@ static long
 lcm(long a, long b) { return a * b / gcd(a, b); }
 
 static long
-factorial(long n)
-{
-    long f = 1;
-    while (n) f *= n--;
-    return f;
-}
-
-static long
 egcd(long a, long b)
 {
     long q, r, x, y;
@@ -101,13 +93,21 @@ egcd(long a, long b)
     return a;
 }
 
-static long
-totient(long n)
+static unsigned
+factorial(unsigned n)
 {
-    long tot = 1;
-    long pos = n - 1;
+    long f = 1;
+    while (n) f *= n--;
+    return f;
+}
+
+static unsigned
+tot(unsigned n)
+{
+    unsigned tot = 1;
+    unsigned pos = n - 1;
     while (pos > 1) {
-        if (gcd(pos, n) == 1)
+        if (gcd((long) pos, (long) n) == 1)
             tot++;
         pos--;
     }
@@ -115,9 +115,55 @@ totient(long n)
 }
 
 static unsigned
-factor(long n)
+isprime(unsigned n)
 {
-    long d;
+    unsigned d;
+    unsigned m;
+    if (n < 2)
+        return 0;
+    if (n == 2)
+        return 1;
+    if (n % 2 == 0)
+        return 0;
+    m = (unsigned) sqrt((double) n);
+    for (d = 3; d <= m; d += 2)
+        if (n % d == 0)
+            return 0;
+    return 1;
+}
+
+static unsigned
+prev(unsigned n)
+{
+    if (n < 4)
+        return 2;
+    if (n % 2 == 0)
+        n++;
+    for (n -= 2; n > 2; n -= 2)
+        if (isprime(n))
+            break;
+    return n;
+}
+
+static unsigned
+next(unsigned n)
+{
+    if (n < 2)
+        return 2;
+    if (n == 2)
+        return 3;
+    if (n % 2 == 0)
+        n--;
+    for (n += 2; n > 0; n += 2)
+        if (isprime(n))
+            break;
+    return n;
+}
+
+static unsigned
+factor(unsigned n)
+{
+    unsigned d;
     unsigned c = 0;
     if (n % 2 == 0) {
         push(2);
@@ -191,6 +237,9 @@ parse(const char *token)
 #define CFUNC(OP)   else if (!strcmp(token, #OP)) \
                     { push(c ## OP(pop())); }
 
+#define UFUNC(OP)   else if (!strcmp(token, #OP)) \
+                    { push(OP((unsigned) pop())); }
+
 static void
 process(const char *token)
 {
@@ -204,6 +253,7 @@ process(const char *token)
     CFUNC(log) CFUNC(sqrt) CFUNC(acos) CFUNC(asin) CFUNC(atan) CFUNC(cos)
     CFUNC(sin) CFUNC(tan) CFUNC(acosh) CFUNC(asinh) CFUNC(atanh) CFUNC(cosh)
     CFUNC(sinh) CFUNC(tanh)
+    UFUNC(tot) UFUNC(factor) UFUNC(isprime) UFUNC(prev) UFUNC(next)
     else if (!strcmp(token, "%")) {
         b = pop(); a = pop();
         push(fmod(creal(a), creal(b)));
@@ -226,11 +276,7 @@ process(const char *token)
     } else if (!strcmp(token, "conj")) {
         push(conj(pop()));
     } else if (!strcmp(token, "!")) {
-        push(factorial((long) pop()));
-    } else if (!strcmp(token, "tot")) {
-        push(totient((long) pop()));
-    } else if (!strcmp(token, "factor")) {
-        push(factor((long) pop()));
+        push(factorial((unsigned) pop()));
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

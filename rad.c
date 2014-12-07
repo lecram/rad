@@ -172,11 +172,10 @@ parse(const char *token)
         char *sep;
         number = strtod(token, &sep);
         number += atof(++sep) * I;
-    } else if (strchr(token, '.')) {
+    } else if (strchr(token, '.'))
         number = (number_t) atof(token);
-    } else {
-        number = (number_t) atoi(token);
-    }
+    else
+        number = (number_t) strtol(token, NULL, 0);
     return number;
 }
 

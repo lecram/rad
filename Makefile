@@ -1,4 +1,5 @@
 LDFLAGS=-lm
+CFLAGS=-O2
 PREFIX=/usr/local
 MANPREFIX=$(PREFIX)/man
 INSTALL=install -D

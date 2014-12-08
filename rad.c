@@ -1,8 +1,5 @@
-/* gcc -O2 -Wall -Wextra -Werror -std=c99 -o rad rad.c -lm */
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <complex.h>

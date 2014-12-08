@@ -22,3 +22,8 @@ $ rad
 $
 
 Rad has support for bitwise operations, trigonometry, complex number arithmetic and some basic number theoretic functions. See the man page for a complete list of supported operations.
+
+Building and installing:
+
+$ make
+$ sudo make install

@@ -1,6 +1,4 @@
-This is a simple calculator that reads postfix expressions from stdin and
-process them on a stack. Whenever a newline character is read, the top of the
-stack is printed to stdout.
+This is a simple calculator that reads postfix expressions from stdin and process them on a stack. Whenever a newline character is read, the top of the stack is printed to stdout.
 
 Examples:
 
@@ -23,6 +21,4 @@ $ rad
 0.61803399
 $
 
-Rad has support for bitwise operations, trigonometry, complex number arithmetic
-and some basic number theoretic functions. See the man page for a complete list
-of supported operations.
+Rad has support for bitwise operations, trigonometry, complex number arithmetic and some basic number theoretic functions. See the man page for a complete list of supported operations.

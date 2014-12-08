@@ -1,0 +1,28 @@
+This is a simple calculator that reads postfix expressions from stdin and
+process them on a stack. Whenever a newline character is read, the top of the
+stack is printed to stdout.
+
+Examples:
+
+$ echo "2 3 +" | rad
+5
+$ echo "60 60 24 7 * * *" | rad
+604800
+$ echo "5 sqrt 1 - 2 /" | rad
+0.61803399
+$ printf "5 sqrt\n1 -\n2 /\n" | rad
+2.236068
+1.236068
+0.61803399
+$ rad
+5 sqrt
+2.236068
+1 -
+1.236068
+2 /
+0.61803399
+$
+
+Rad has support for bitwise operations, trigonometry, complex number arithmetic
+and some basic number theoretic functions. See the man page for a complete list
+of supported operations.

@@ -107,6 +107,22 @@ Closest prime number below or above n [n -- p]
 .TP
 .B factor
 Values and count of factors of n [n -- f1 f2 f3 ... c]
+.SH STACK OPERATORS
+.TP
+.B drop
+Drop top item from the stack [a -- ].
+.TP
+.B dup
+Duplicate top item in the stack [a -- a a].
+.TP
+.B exch
+Swap two items on the top of the stack [a b -- b a].
+.TP
+.B clear
+Empty stack [a b c ... -- ]
+.TP
+.B :N
+Copy stack item indexed by N. Indexes are 0, 1, 2, ..., -3, -2, -1.
 .SH NOTES
 .PP
 Project homepage: <https://github.com/lecram/rad>.

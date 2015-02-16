@@ -304,6 +304,10 @@ process(const char *token)
         exch();
     } else if (!strcmp(token, "clear")) {
         while (stk.len) pop();
+    } else if (token[0] == ':') {
+        int index = strtol(token+1, NULL, 0);
+        if (index < 0) index += stk.len;
+        push(index >= 0 && index < stk.len ? stk.slots[index] : 0);
     } else
         push(parse(token));
 }

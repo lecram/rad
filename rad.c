@@ -333,7 +333,7 @@ main()
         } else if (!strcmp(buffer, "hex\n")) {
             repr = HEX;
         } else {
-        token = strtok(buffer, " \n");
+            token = strtok(buffer, " \n");
             while (token) {
                 process(token);
                 token = strtok(NULL, " \n");

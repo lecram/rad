@@ -304,6 +304,12 @@ process(const char *token)
     } else if (!strcmp(token, "if")) {
         b = pop(); a = pop();
         push(pop() ? a : b);
+    } else if (!strcmp(token, "min")) {
+        b = pop(); a = pop();
+        push(creal(a) < creal(b) ? a : b);
+    } else if (!strcmp(token, "max")) {
+        b = pop(); a = pop();
+        push(creal(a) > creal(b) ? a : b);
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

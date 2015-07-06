@@ -248,6 +248,9 @@ parse(const char *token)
 #define BINBOP(OP)  else if (!strcmp(token, #OP)) \
                     { b = pop(); a = pop(); push(((unsigned) a) OP ((unsigned) b)); }
 
+#define BINROP(OP)   else if (!strcmp(token, #OP)) \
+                    { b = pop(); a = pop(); push(creal(a) OP creal(b)); }
+
 #define BFUNC(OP)   else if (!strcmp(token, #OP)) \
                     { b = pop(); a = pop(); push(OP((long) a, (long) b)); }
 
@@ -264,7 +267,9 @@ process(const char *token)
     if (!strcmp(token, "prec"))
         prec = pop();
     BINOP(+) BINOP(-) BINOP(*) BINOP(/)
+    BINOP(==) BINOP(!=) BINOP(||) BINOP(&&)
     BINBOP(|) BINBOP(&) BINBOP(^) BINBOP(>>) BINBOP(<<)
+    BINROP(<) BINROP(<=) BINROP(>) BINROP(>=)
     BFUNC(gcd) BFUNC(lcm) BFUNC(egcd)
     CFUNC(real) CFUNC(imag) CFUNC(arg) CFUNC(abs) CFUNC(proj) CFUNC(exp)
     CFUNC(log) CFUNC(sqrt) CFUNC(acos) CFUNC(asin) CFUNC(atan) CFUNC(cos)
@@ -296,6 +301,9 @@ process(const char *token)
         push(factorial((unsigned) pop()));
     } else if (!strcmp(token, "#")) {
         push(primorial((unsigned) pop()));
+    } else if (!strcmp(token, "if")) {
+        b = pop(); a = pop();
+        push(pop() ? a : b);
     } else if (!strcmp(token, "drop")) {
         pop();
     } else if (!strcmp(token, "dup")) {

@@ -48,6 +48,12 @@ Bitwise not (as in C) [a -- b]
 .B | & ^ >> <<
 Bitwise operations (as in C) [a b -- c]
 .TP
+.B || && == != < <= > >=
+Logic operations (as in C) [a b -- c]
+.TP
+.B if
+If a is nonzero, return b, otherwise return c (d = a ? b : c) [a b c -- d]
+.TP
 .B log exp
 Base \fBe\fR logarithm and exponentiation [a -- b]
 .TP

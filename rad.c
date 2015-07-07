@@ -215,7 +215,7 @@ snprintn(char *buf, int buf_size, number_t number)
                 );
             break;
         case HEX:
-            count = snprintf(buf, buf_size, "%#0*X\n", sizeof(unsigned) * 2 + 2, (unsigned) number);
+            count = snprintf(buf, buf_size, "%#0*X", sizeof(unsigned) * 2 + 2, (unsigned) number);
             break;
     }
     return count;
